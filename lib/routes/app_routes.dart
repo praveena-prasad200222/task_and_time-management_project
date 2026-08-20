@@ -4,6 +4,7 @@ import '../features/dashboard/screens/dashboard_screen.dart';
 import '../features/tasks/screens/task_list_screen.dart';
 import '../features/tasks/screens/task_detail_screen.dart';
 import '../features/tasks/screens/add_edit_task_screen.dart';
+import '../features/profile/screens/profile_screen.dart';
 import '../models/task_model.dart';
 
 class AppRoutes {
@@ -12,6 +13,7 @@ class AppRoutes {
         '/dashboard': (context) => const DashboardScreen(),
         '/tasks': (context) => const TaskListScreen(),
         '/add-task': (context) => const AddEditTaskScreen(),
+        '/profile': (context) => const ProfileScreen(),
       };
 
   static Route<dynamic>? onGenerateRoute(RouteSettings settings) {

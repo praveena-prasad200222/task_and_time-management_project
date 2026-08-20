@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../core/constants/app_colors.dart';
+import '../../../core/utils/date_formatter.dart';
 import '../../../core/widgets/task_card.dart';
 import '../../../core/widgets/loading_widget.dart';
 import '../../../core/widgets/empty_state_widget.dart';
@@ -78,66 +79,159 @@ class _DashboardScreenState extends State<DashboardScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.background,
-      appBar: AppBar(
-        title: const Text(
-          'Task Dashboard',
-          style: TextStyle(color: Colors.white, fontWeight: FontWeight.w700),
-        ),
-        backgroundColor: AppColors.primaryDark,
-        elevation: 4,
-        shadowColor: const Color(0x33000000),
-        shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.vertical(
-            bottom: Radius.circular(28),
-          ),
-        ),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.logout, color: Colors.white),
-            tooltip: 'Logout',
-            onPressed: _confirmLogout,
-          ),
-        ],
-      ),
-      body: BlocBuilder<TaskBloc, TaskState>(
-        builder: (context, state) {
-          if (state is TaskLoadingState) {
-            return const LoadingWidget(isDashboard: true);
-          }
-          if (state is TaskErrorState) {
-            return RefreshIndicator(
-              color: AppColors.primary,
-              backgroundColor: AppColors.surface,
-              displacement: 32,
-              strokeWidth: 2.8,
-              onRefresh: _handleRefresh,
-              child: SingleChildScrollView(
-                physics: const AlwaysScrollableScrollPhysics(),
-                child: SizedBox(
-                  height: MediaQuery.of(context).size.height * 0.7,
-                  child: CustomErrorWidget(
-                    message: state.message,
-                    onRetry: () => context.read<TaskBloc>().add(const LoadTasksEvent()),
+      body: SafeArea(
+        child: BlocBuilder<TaskBloc, TaskState>(
+          builder: (context, state) {
+            if (state is TaskLoadingState) {
+              return const LoadingWidget(isDashboard: true);
+            }
+            if (state is TaskErrorState) {
+              return RefreshIndicator(
+                color: AppColors.primary,
+                backgroundColor: AppColors.surface,
+                displacement: 32,
+                strokeWidth: 2.8,
+                onRefresh: _handleRefresh,
+                child: SingleChildScrollView(
+                  physics: const AlwaysScrollableScrollPhysics(),
+                  child: SizedBox(
+                    height: MediaQuery.of(context).size.height * 0.7,
+                    child: CustomErrorWidget(
+                      message: state.message,
+                      onRetry: () => context.read<TaskBloc>().add(const LoadTasksEvent()),
+                    ),
                   ),
                 ),
-              ),
-            );
-          }
-          if (state is TaskLoadedState) {
-            final recentTasks = state.tasks.take(4).toList();
+              );
+            }
+            if (state is TaskLoadedState) {
+              final recentTasks = state.tasks.take(4).toList();
 
-            return RefreshIndicator(
-              color: AppColors.primary,
-              backgroundColor: AppColors.surface,
-              displacement: 32,
-              strokeWidth: 2.8,
-              onRefresh: _handleRefresh,
-              child: SingleChildScrollView(
-                physics: const AlwaysScrollableScrollPhysics(),
-                padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 20.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
+              return RefreshIndicator(
+                color: AppColors.primary,
+                backgroundColor: AppColors.surface,
+                displacement: 32,
+                strokeWidth: 2.8,
+                onRefresh: _handleRefresh,
+                child: SingleChildScrollView(
+                  physics: const AlwaysScrollableScrollPhysics(),
+                  padding: const EdgeInsets.only(bottom: 24.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      // Top Custom Header Area (Matching reference screenshot)
+                      Container(
+                        width: double.infinity,
+                        padding: const EdgeInsets.fromLTRB(20, 16, 20, 24),
+                        decoration: BoxDecoration(
+                          gradient: const LinearGradient(
+                            colors: [Color(0xFFDBEAFE), Color(0xFFEFF6FF), Color(0xFFF3F4F6)],
+                            begin: Alignment.topCenter,
+                            end: Alignment.bottomCenter,
+                          ),
+                          borderRadius: const BorderRadius.vertical(
+                            bottom: Radius.circular(32),
+                          ),
+                          boxShadow: [
+                            BoxShadow(
+                              color: const Color(0xFF1E3A8A).withValues(alpha: 0.05),
+                              blurRadius: 16,
+                              offset: const Offset(0, 6),
+                            ),
+                          ],
+                        ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            // Top Row: Avatar & Logout Action
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                // User Avatar Icon (Tap to open Profile Screen)
+                                GestureDetector(
+                                  onTap: () {
+                                    Navigator.pushNamed(context, '/profile');
+                                  },
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                      shape: BoxShape.circle,
+                                      border: Border.all(
+                                        color: Colors.white,
+                                        width: 2,
+                                      ),
+                                      boxShadow: [
+                                        BoxShadow(
+                                          color: Colors.black.withValues(alpha: 0.1),
+                                          blurRadius: 6,
+                                          offset: const Offset(0, 2),
+                                        ),
+                                      ],
+                                    ),
+                                    child: const CircleAvatar(
+                                      radius: 22,
+                                      backgroundColor: Color(0xFF93C5FD),
+                                      child: Icon(Icons.person, color: Color(0xFF1E3A8A), size: 24),
+                                    ),
+                                  ),
+                                ),
+                                // Logout Action Button
+                                Container(
+                                  decoration: BoxDecoration(
+                                    color: Colors.white.withValues(alpha: 0.9),
+                                    shape: BoxShape.circle,
+                                    border: Border.all(
+                                      color: const Color(0xFFBFDBFE),
+                                      width: 1,
+                                    ),
+                                  ),
+                                  child: IconButton(
+                                    icon: const Icon(Icons.logout_rounded, color: Color(0xFFDC2626)),
+                                    tooltip: 'Logout',
+                                    onPressed: _confirmLogout,
+                                  ),
+                                ),
+                              ],
+                            ),
+                            const SizedBox(height: 22),
+                            // Greeting Headline
+                            RichText(
+                              text: TextSpan(
+                                style: const TextStyle(
+                                  fontSize: 28,
+                                  fontWeight: FontWeight.w400,
+                                  color: AppColors.textPrimary,
+                                  letterSpacing: -0.5,
+                                ),
+                                children: const [
+                                  TextSpan(text: 'Hello, '),
+                                  TextSpan(
+                                    text: 'User!',
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.w900,
+                                      color: Color(0xFF1D4ED8),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            const SizedBox(height: 4),
+                            // Date Subtitle
+                            Text(
+                              DateFormatter.formatFullHeaderDate(DateTime.now()),
+                              style: const TextStyle(
+                                fontSize: 14,
+                                fontWeight: FontWeight.w600,
+                                color: AppColors.textSecondary,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 20.0),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
                     // Welcome Banner Card (Inspired by reference UI header card)
                     Container(
                       width: double.infinity,
@@ -329,12 +423,16 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   ],
                 ),
               ),
-            );
-          }
+            ],
+          ),
+        ),
+      );
+    }
           return const SizedBox.shrink();
         },
       ),
-      floatingActionButton: FloatingActionButton.extended(
+    ),
+    floatingActionButton: FloatingActionButton.extended(
         backgroundColor: AppColors.primary,
         elevation: 6,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),

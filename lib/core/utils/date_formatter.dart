@@ -12,4 +12,8 @@ class DateFormatter {
   static String formatShortDate(DateTime date) {
     return DateFormat('dd/MM/yyyy').format(date);
   }
+
+  static String formatFullHeaderDate(DateTime date) {
+    return DateFormat('EEE, dd MMM').format(date);
+  }
 }
