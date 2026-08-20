@@ -76,8 +76,8 @@ class _TaskListScreenState extends State<TaskListScreen> {
             icon: Icon(
               Icons.filter_list,
               color: (_selectedStatus != null || _selectedPriority != null)
-                  ? AppColors.primary
-                  : AppColors.textPrimary,
+                  ? const Color(0xFFFBBF24)
+                  : Colors.white,
             ),
             onPressed: _openFilterSheet,
           ),
@@ -191,15 +191,29 @@ class _TaskListScreenState extends State<TaskListScreen> {
                       itemCount: state.tasks.length,
                       itemBuilder: (context, index) {
                         final task = state.tasks[index];
-                        return TaskCard(
-                          task: task,
-                          onTap: () {
-                            Navigator.pushNamed(
-                              context,
-                              '/task-details',
-                              arguments: task,
+                        return TweenAnimationBuilder<double>(
+                          tween: Tween<double>(begin: 0.0, end: 1.0),
+                          duration: Duration(milliseconds: 300 + (index * 80).clamp(0, 500)),
+                          curve: Curves.easeOutQuad,
+                          builder: (context, value, child) {
+                            return Transform.translate(
+                              offset: Offset(0, 20 * (1 - value)),
+                              child: Opacity(
+                                opacity: value.clamp(0.0, 1.0),
+                                child: child,
+                              ),
                             );
                           },
+                          child: TaskCard(
+                            task: task,
+                            onTap: () {
+                              Navigator.pushNamed(
+                                context,
+                                '/task-details',
+                                arguments: task,
+                              );
+                            },
+                          ),
                         );
                       },
                     ),

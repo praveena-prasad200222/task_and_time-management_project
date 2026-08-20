@@ -46,10 +46,21 @@ class _DashboardScreenState extends State<DashboardScreen> {
     return Scaffold(
       backgroundColor: AppColors.background,
       appBar: AppBar(
-        title: const Text('Task Dashboard'),
+        title: const Text(
+          'Task Dashboard',
+          style: TextStyle(color: Colors.white, fontWeight: FontWeight.w700),
+        ),
+        backgroundColor: AppColors.primaryDark,
+        elevation: 4,
+        shadowColor: const Color(0x33000000),
+        shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.vertical(
+            bottom: Radius.circular(28),
+          ),
+        ),
         actions: [
           IconButton(
-            icon: const Icon(Icons.logout, color: AppColors.error),
+            icon: const Icon(Icons.logout, color: Colors.white),
             tooltip: 'Logout',
             onPressed: _confirmLogout,
           ),
@@ -58,7 +69,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
       body: BlocBuilder<TaskBloc, TaskState>(
         builder: (context, state) {
           if (state is TaskLoadingState) {
-            return const LoadingWidget(message: 'Loading dashboard statistics...');
+            return const LoadingWidget(isDashboard: true);
           }
           if (state is TaskErrorState) {
             return CustomErrorWidget(
@@ -75,26 +86,97 @@ class _DashboardScreenState extends State<DashboardScreen> {
               },
               child: SingleChildScrollView(
                 physics: const AlwaysScrollableScrollPhysics(),
-                padding: const EdgeInsets.all(16.0),
+                padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 20.0),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
+                    // Welcome Banner Card (Inspired by reference UI header card)
+                    Container(
+                      width: double.infinity,
+                      padding: const EdgeInsets.all(20),
+                      decoration: BoxDecoration(
+                        gradient: const LinearGradient(
+                          colors: [Color(0xFF1D4ED8), Color(0xFF3B82F6)],
+                          begin: Alignment.topLeft,
+                          end: Alignment.bottomRight,
+                        ),
+                        borderRadius: BorderRadius.circular(24),
+                        boxShadow: [
+                          BoxShadow(
+                            color: const Color(0xFF1D4ED8).withValues(alpha: 0.3),
+                            blurRadius: 16,
+                            offset: const Offset(0, 8),
+                          ),
+                        ],
+                      ),
+                      child: Row(
+                        children: [
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                const Text(
+                                  'Welcome Back 👋',
+                                  style: TextStyle(
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w500,
+                                    color: Colors.white70,
+                                  ),
+                                ),
+                                const SizedBox(height: 4),
+                                const Text(
+                                  'Track Your Productivity',
+                                  style: TextStyle(
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.w800,
+                                    color: Colors.white,
+                                    letterSpacing: 0.2,
+                                  ),
+                                ),
+                                const SizedBox(height: 6),
+                                const Text(
+                                  'Stay focused and complete your daily goals',
+                                  style: TextStyle(
+                                    fontSize: 12,
+                                    color: Colors.white70,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          const SizedBox(width: 12),
+                          Container(
+                            padding: const EdgeInsets.all(12),
+                            decoration: BoxDecoration(
+                              color: Colors.white.withValues(alpha: 0.2),
+                              shape: BoxShape.circle,
+                            ),
+                            child: const Icon(
+                              Icons.analytics_outlined,
+                              size: 32,
+                              color: Colors.white,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    const SizedBox(height: 24),
                     const Text(
                       'Overview Statistics',
                       style: TextStyle(
                         fontSize: 18,
-                        fontWeight: FontWeight.w700,
+                        fontWeight: FontWeight.w800,
                         color: AppColors.textPrimary,
                       ),
                     ),
-                    const SizedBox(height: 12),
+                    const SizedBox(height: 14),
                     GridView.count(
                       crossAxisCount: 2,
                       shrinkWrap: true,
                       physics: const NeverScrollableScrollPhysics(),
-                      mainAxisSpacing: 12,
-                      crossAxisSpacing: 12,
-                      childAspectRatio: 1.5,
+                      mainAxisSpacing: 14,
+                      crossAxisSpacing: 14,
+                      childAspectRatio: 1.45,
                       children: [
                         _buildStatCard(
                           title: 'Total Tasks',
@@ -126,7 +208,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                         ),
                       ],
                     ),
-                    const SizedBox(height: 24),
+                    const SizedBox(height: 28),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
@@ -134,7 +216,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                           'Recent Tasks',
                           style: TextStyle(
                             fontSize: 18,
-                            fontWeight: FontWeight.w700,
+                            fontWeight: FontWeight.w800,
                             color: AppColors.textPrimary,
                           ),
                         ),
@@ -144,12 +226,15 @@ class _DashboardScreenState extends State<DashboardScreen> {
                           },
                           child: const Text(
                             'View All',
-                            style: TextStyle(color: AppColors.primary, fontWeight: FontWeight.w600),
+                            style: TextStyle(
+                              color: AppColors.primary,
+                              fontWeight: FontWeight.w700,
+                            ),
                           ),
                         ),
                       ],
                     ),
-                    const SizedBox(height: 8),
+                    const SizedBox(height: 10),
                     if (recentTasks.isEmpty)
                       EmptyStateWidget(
                         title: 'No Tasks Yet',
@@ -167,15 +252,29 @@ class _DashboardScreenState extends State<DashboardScreen> {
                         itemCount: recentTasks.length,
                         itemBuilder: (context, index) {
                           final task = recentTasks[index];
-                          return TaskCard(
-                            task: task,
-                            onTap: () {
-                              Navigator.pushNamed(
-                                context,
-                                '/task-details',
-                                arguments: task,
+                          return TweenAnimationBuilder<double>(
+                            tween: Tween<double>(begin: 0.0, end: 1.0),
+                            duration: Duration(milliseconds: 350 + (index * 100)),
+                            curve: Curves.easeOutQuad,
+                            builder: (context, value, child) {
+                              return Transform.translate(
+                                offset: Offset(0, 24 * (1 - value)),
+                                child: Opacity(
+                                  opacity: value.clamp(0.0, 1.0),
+                                  child: child,
+                                ),
                               );
                             },
+                            child: TaskCard(
+                              task: task,
+                              onTap: () {
+                                Navigator.pushNamed(
+                                  context,
+                                  '/task-details',
+                                  arguments: task,
+                                );
+                              },
+                            ),
                           );
                         },
                       ),
@@ -189,13 +288,15 @@ class _DashboardScreenState extends State<DashboardScreen> {
       ),
       floatingActionButton: FloatingActionButton.extended(
         backgroundColor: AppColors.primary,
+        elevation: 6,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
         onPressed: () {
           Navigator.pushNamed(context, '/add-task');
         },
         icon: const Icon(Icons.add, color: Colors.white),
         label: const Text(
           'Quick Add',
-          style: TextStyle(color: Colors.white, fontWeight: FontWeight.w600),
+          style: TextStyle(color: Colors.white, fontWeight: FontWeight.w700),
         ),
       ),
     );
@@ -211,16 +312,10 @@ class _DashboardScreenState extends State<DashboardScreen> {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: AppColors.border, width: 1),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.02),
-            blurRadius: 8,
-            offset: const Offset(0, 2),
-          ),
-        ],
+        color: AppColors.surface,
+        borderRadius: BorderRadius.circular(20),
+        border: Border.all(color: AppColors.border.withValues(alpha: 0.7), width: 1),
+        boxShadow: AppColors.cardShadow,
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -229,30 +324,34 @@ class _DashboardScreenState extends State<DashboardScreen> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(
-                title,
-                style: const TextStyle(
-                  fontSize: 13,
-                  fontWeight: FontWeight.w600,
-                  color: AppColors.textSecondary,
+              Expanded(
+                child: Text(
+                  title,
+                  style: const TextStyle(
+                    fontSize: 13,
+                    fontWeight: FontWeight.w600,
+                    color: AppColors.textSecondary,
+                  ),
+                  overflow: TextOverflow.ellipsis,
                 ),
               ),
               Container(
-                padding: const EdgeInsets.all(6),
+                padding: const EdgeInsets.all(8),
                 decoration: BoxDecoration(
                   color: bgColor,
-                  borderRadius: BorderRadius.circular(8),
+                  borderRadius: BorderRadius.circular(12),
                 ),
-                child: Icon(icon, size: 18, color: color),
+                child: Icon(icon, size: 20, color: color),
               ),
             ],
           ),
           Text(
             count,
             style: TextStyle(
-              fontSize: 26,
+              fontSize: 28,
               fontWeight: FontWeight.w800,
               color: color,
+              letterSpacing: -0.5,
             ),
           ),
         ],

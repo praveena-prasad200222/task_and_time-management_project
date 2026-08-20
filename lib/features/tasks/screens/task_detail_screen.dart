@@ -73,7 +73,7 @@ class TaskDetailScreen extends StatelessWidget {
         title: const Text('Task Details'),
         actions: [
           IconButton(
-            icon: const Icon(Icons.edit_outlined, color: AppColors.primary),
+            icon: const Icon(Icons.edit_outlined, color: Colors.white),
             onPressed: () {
               Navigator.pushNamed(
                 context,
@@ -83,7 +83,7 @@ class TaskDetailScreen extends StatelessWidget {
             },
           ),
           IconButton(
-            icon: const Icon(Icons.delete_outline, color: AppColors.error),
+            icon: const Icon(Icons.delete_outline, color: Color(0xFFFCA5A5)),
             onPressed: () => _confirmDelete(context),
           ),
         ],
@@ -93,7 +93,13 @@ class TaskDetailScreen extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Card(
+            Container(
+              decoration: BoxDecoration(
+                color: AppColors.surface,
+                borderRadius: BorderRadius.circular(20),
+                border: Border.all(color: AppColors.border.withValues(alpha: 0.7), width: 1),
+                boxShadow: AppColors.cardShadow,
+              ),
               child: Padding(
                 padding: const EdgeInsets.all(20.0),
                 child: Column(

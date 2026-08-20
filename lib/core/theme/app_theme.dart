@@ -16,23 +16,32 @@ class AppTheme {
       ),
       fontFamily: 'Roboto',
       appBarTheme: const AppBarTheme(
-        backgroundColor: AppColors.surface,
-        elevation: 0,
+        backgroundColor: AppColors.primaryDark,
+        foregroundColor: Colors.white,
+        elevation: 4,
+        shadowColor: Color(0x33000000),
         centerTitle: true,
-        iconTheme: IconThemeData(color: AppColors.textPrimary),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.vertical(
+            bottom: Radius.circular(24),
+          ),
+        ),
+        iconTheme: IconThemeData(color: Colors.white),
+        actionsIconTheme: IconThemeData(color: Colors.white),
         titleTextStyle: TextStyle(
-          color: AppColors.textPrimary,
-          fontSize: 18,
-          fontWeight: FontWeight.w600,
+          color: Colors.white,
+          fontSize: 19,
+          fontWeight: FontWeight.w700,
+          letterSpacing: 0.3,
         ),
       ),
       cardTheme: CardThemeData(
         color: AppColors.surface,
-        elevation: 1,
-        shadowColor: Colors.black.withValues(alpha: 0.05),
+        elevation: 3,
+        shadowColor: Colors.black.withValues(alpha: 0.08),
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(16),
-          side: const BorderSide(color: AppColors.border, width: 1),
+          borderRadius: BorderRadius.circular(20),
+          side: const BorderSide(color: AppColors.border, width: 0.8),
         ),
       ),
       elevatedButtonTheme: ElevatedButtonThemeData(
