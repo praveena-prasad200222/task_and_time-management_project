@@ -67,26 +67,35 @@ class TaskCard extends StatelessWidget {
                 const SizedBox(height: 14),
                 const Divider(height: 1, color: AppColors.border),
                 const SizedBox(height: 10),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                Wrap(
+                  alignment: WrapAlignment.spaceBetween,
+                  crossAxisAlignment: WrapCrossAlignment.center,
+                  spacing: 12,
+                  runSpacing: 6,
                   children: [
                     Row(
+                      mainAxisSize: MainAxisSize.min,
                       children: [
                         const Icon(Icons.person_outline, size: 15, color: AppColors.primary),
                         const SizedBox(width: 4),
-                        Text(
-                          task.assignedUser,
-                          style: const TextStyle(
-                            fontSize: 12,
-                            fontWeight: FontWeight.w600,
-                            color: AppColors.textSecondary,
+                        Flexible(
+                          child: Text(
+                            task.assignedUser,
+                            style: const TextStyle(
+                              fontSize: 12,
+                              fontWeight: FontWeight.w600,
+                              color: AppColors.textSecondary,
+                            ),
+                            overflow: TextOverflow.ellipsis,
                           ),
                         ),
                       ],
                     ),
                     Row(
+                      mainAxisSize: MainAxisSize.min,
                       children: [
                         Row(
+                          mainAxisSize: MainAxisSize.min,
                           children: [
                             const Icon(Icons.access_time, size: 13, color: AppColors.textSecondary),
                             const SizedBox(width: 3),
@@ -102,6 +111,7 @@ class TaskCard extends StatelessWidget {
                         ),
                         const SizedBox(width: 10),
                         Row(
+                          mainAxisSize: MainAxisSize.min,
                           children: [
                             const Icon(Icons.calendar_today_outlined, size: 13, color: AppColors.primary),
                             const SizedBox(width: 3),
