@@ -6,7 +6,7 @@ import 'task_priority.dart';
 part 'task_model.g.dart';
 
 @HiveType(typeId: 0)
-class TaskModel extends HiveObject with EquatableMixin {
+class TaskModel extends Equatable {
   @HiveField(0)
   final String id;
 

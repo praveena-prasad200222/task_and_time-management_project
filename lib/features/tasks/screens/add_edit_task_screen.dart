@@ -113,7 +113,7 @@ class _AddEditTaskScreenState extends State<AddEditTaskScreen> {
         child: Form(
           key: _formKey,
           child: Column(
-            crossAxisAlignment: CrossAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               CustomTextField(
                 label: 'Task Title',
@@ -142,7 +142,7 @@ class _AddEditTaskScreenState extends State<AddEditTaskScreen> {
                 children: [
                   Expanded(
                     child: Column(
-                      crossAxisAlignment: CrossAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         const Text(
                           'Priority',
@@ -168,7 +168,7 @@ class _AddEditTaskScreenState extends State<AddEditTaskScreen> {
                   const SizedBox(width: 12),
                   Expanded(
                     child: Column(
-                      crossAxisAlignment: CrossAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         const Text(
                           'Status',

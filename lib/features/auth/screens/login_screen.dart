@@ -66,8 +66,8 @@ class _LoginScreenState extends State<LoginScreen> {
                 child: Form(
                   key: _formKey,
                   child: Column(
-                    mainAxisAlignment: MainAlignment.center,
-                    crossAxisAlignment: CrossAlignment.stretch,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
                       Container(
                         padding: const EdgeInsets.all(20),

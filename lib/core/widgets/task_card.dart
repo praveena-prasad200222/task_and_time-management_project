@@ -29,10 +29,10 @@ class TaskCard extends StatelessWidget {
         child: Padding(
           padding: const EdgeInsets.all(16.0),
           child: Column(
-            crossAxisAlignment: CrossAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Row(
-                mainAxisAlignment: MainAlignment.spaceBetween,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   StatusBadge(status: task.status),
                   PriorityBadge(priority: task.priority),
@@ -64,7 +64,7 @@ class TaskCard extends StatelessWidget {
               const Divider(height: 1, color: AppColors.border),
               const SizedBox(height: 10),
               Row(
-                mainAxisAlignment: MainAlignment.spaceBetween,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Row(
                     children: [

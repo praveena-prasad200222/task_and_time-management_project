@@ -11,7 +11,6 @@ import '../../auth/bloc/auth_event.dart';
 import '../../tasks/bloc/task_bloc.dart';
 import '../../tasks/bloc/task_event.dart';
 import '../../tasks/bloc/task_state.dart';
-import '../../../models/task_status.dart';
 
 class DashboardScreen extends StatefulWidget {
   const DashboardScreen({super.key});
@@ -78,7 +77,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 physics: const AlwaysScrollableScrollPhysics(),
                 padding: const EdgeInsets.all(16.0),
                 child: Column(
-                  crossAxisAlignment: CrossAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     const Text(
                       'Overview Statistics',
@@ -129,7 +128,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     ),
                     const SizedBox(height: 24),
                     Row(
-                      mainAxisAlignment: MainAlignment.spaceBetween,
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         const Text(
                           'Recent Tasks',
@@ -224,11 +223,11 @@ class _DashboardScreenState extends State<DashboardScreen> {
         ],
       ),
       child: Column(
-        crossAxisAlignment: CrossAlignment.start,
-        mainAxisAlignment: MainAlignment.spaceBetween,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Row(
-            mainAxisAlignment: MainAlignment.spaceBetween,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
                 title,
