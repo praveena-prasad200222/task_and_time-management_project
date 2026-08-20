@@ -8,7 +8,6 @@ class HiveService {
   static Future<void> init() async {
     await Hive.initFlutter();
 
-    // Register Hive Adapters
     if (!Hive.isAdapterRegistered(0)) {
       Hive.registerAdapter(TaskModelAdapter());
     }
@@ -19,7 +18,6 @@ class HiveService {
       Hive.registerAdapter(TaskPriorityAdapter());
     }
 
-    // Open Boxes
     await Hive.openBox<TaskModel>(AppConstants.tasksBoxName);
     await Hive.openBox(AppConstants.authBoxName);
   }

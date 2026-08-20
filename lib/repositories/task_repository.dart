@@ -13,12 +13,10 @@ class TaskRepository {
     TaskPriority? priorityFilter,
     DateTime? dueDateFilter,
   }) async {
-    // Simulate slight delay for loading state
     await Future.delayed(const Duration(milliseconds: 300));
 
     List<TaskModel> tasks = _tasksBox.values.toList();
 
-    // Search by title or description
     if (searchQuery != null && searchQuery.trim().isNotEmpty) {
       final query = searchQuery.toLowerCase().trim();
       tasks = tasks.where((task) {
@@ -27,17 +25,14 @@ class TaskRepository {
       }).toList();
     }
 
-    // Filter by Status
     if (statusFilter != null) {
       tasks = tasks.where((task) => task.status == statusFilter).toList();
     }
 
-    // Filter by Priority
     if (priorityFilter != null) {
       tasks = tasks.where((task) => task.priority == priorityFilter).toList();
     }
 
-    // Filter by Due Date
     if (dueDateFilter != null) {
       tasks = tasks.where((task) {
         return task.dueDate.year == dueDateFilter.year &&
@@ -46,7 +41,6 @@ class TaskRepository {
       }).toList();
     }
 
-    // Sort by created at descending
     tasks.sort((a, b) => b.createdAt.compareTo(a.createdAt));
     return tasks;
   }

@@ -13,7 +13,6 @@ class AuthService {
   }
 
   Future<bool> login(String email, String password) async {
-    // Simulate network delay
     await Future.delayed(const Duration(milliseconds: 800));
 
     if (email.trim() == AppConstants.mockEmail && password == AppConstants.mockPassword) {

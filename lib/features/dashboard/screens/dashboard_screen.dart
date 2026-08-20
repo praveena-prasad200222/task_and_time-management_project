@@ -119,7 +119,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      // Top Custom Header Area (Matching reference screenshot)
                       Container(
                         width: double.infinity,
                         padding: const EdgeInsets.fromLTRB(20, 16, 20, 24),
@@ -143,11 +142,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            // Top Row: Avatar & Logout Action
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                // User Avatar Icon (Tap to open Profile Screen)
                                 GestureDetector(
                                   onTap: () {
                                     Navigator.pushNamed(context, '/profile');
@@ -174,7 +171,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                     ),
                                   ),
                                 ),
-                                // Logout Action Button
                                 Container(
                                   decoration: BoxDecoration(
                                     color: Colors.white.withValues(alpha: 0.9),
@@ -193,7 +189,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
                               ],
                             ),
                             const SizedBox(height: 22),
-                            // Greeting Headline
                             RichText(
                               text: TextSpan(
                                 style: const TextStyle(
@@ -215,7 +210,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
                               ),
                             ),
                             const SizedBox(height: 4),
-                            // Date Subtitle
                             Text(
                               DateFormatter.formatFullHeaderDate(DateTime.now()),
                               style: const TextStyle(
@@ -232,7 +226,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                    // Welcome Banner Card (Inspired by reference UI header card)
                     Container(
                       width: double.infinity,
                       padding: const EdgeInsets.all(20),

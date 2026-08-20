@@ -38,7 +38,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            // Top Header Profile Banner
             Stack(
               children: [
                 Container(
@@ -138,7 +137,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
             const SizedBox(height: 24),
 
-            // Profile Details Section
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20.0),
               child: Column(
@@ -154,7 +152,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   ),
                   const SizedBox(height: 14),
 
-                  // Email Address Card
                   Container(
                     width: double.infinity,
                     padding: const EdgeInsets.all(16),
@@ -211,7 +208,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
                   const SizedBox(height: 14),
 
-                  // Password Card with Show/Hide Toggle
                   Container(
                     width: double.infinity,
                     padding: const EdgeInsets.all(16),
@@ -283,7 +279,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
                   const SizedBox(height: 28),
 
-                  // Action Buttons
                   SizedBox(
                     width: double.infinity,
                     height: 52,

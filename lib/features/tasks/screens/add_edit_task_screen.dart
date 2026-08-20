@@ -140,7 +140,6 @@ class _AddEditTaskScreenState extends State<AddEditTaskScreen> {
       backgroundColor: AppColors.background,
       body: Stack(
         children: [
-          // Top Gradient Background
           Container(
             width: double.infinity,
             height: 250,
@@ -154,7 +153,6 @@ class _AddEditTaskScreenState extends State<AddEditTaskScreen> {
           ),
           Column(
             children: [
-              // Top Custom Header Row
               SafeArea(
                 bottom: false,
                 child: Padding(
@@ -179,7 +177,6 @@ class _AddEditTaskScreenState extends State<AddEditTaskScreen> {
                 ),
               ),
 
-              // Bottom Curved Content Container Sheet
               Expanded(
                 child: Container(
                   width: double.infinity,

@@ -4,7 +4,6 @@ class AppConstants {
   static const String isLoggedInKey = 'isLoggedIn';
   static const String loggedInUserEmailKey = 'loggedInUserEmail';
 
-  // Mock Credentials (PDF Spec)
   static const String mockEmail = 'admin@example.com';
   static const String mockPassword = '123456';
 }

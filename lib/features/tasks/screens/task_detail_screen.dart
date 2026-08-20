@@ -81,7 +81,6 @@ class TaskDetailScreen extends StatelessWidget {
           backgroundColor: AppColors.background,
           body: Stack(
             children: [
-              // Top Gradient Background
               Container(
                 width: double.infinity,
                 height: 250,
@@ -95,7 +94,6 @@ class TaskDetailScreen extends StatelessWidget {
               ),
               Column(
                 children: [
-                  // Top Custom Header Row
                   SafeArea(
                     bottom: false,
                     child: Padding(
@@ -145,7 +143,6 @@ class TaskDetailScreen extends StatelessWidget {
                     ),
                   ),
 
-                  // Bottom Curved Content Container Sheet
                   Expanded(
                     child: Container(
                       width: double.infinity,

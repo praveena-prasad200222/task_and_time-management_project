@@ -96,7 +96,6 @@ class _LoginScreenState extends State<LoginScreen> {
         },
         child: Stack(
           children: [
-            // Top Section - Gradient Background & Header Text + Graphics
             Positioned(
               top: 0,
               left: 0,
@@ -114,7 +113,6 @@ class _LoginScreenState extends State<LoginScreen> {
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    // Headline Text
                     Expanded(
                       flex: 3,
                       child: Column(
@@ -152,7 +150,6 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                     ),
                     const SizedBox(width: 8),
-                    // Vector Illustration Accent Graphics (Larger Setting/Gear Icons)
                     Expanded(
                       flex: 2,
                       child: Stack(
@@ -184,7 +181,6 @@ class _LoginScreenState extends State<LoginScreen> {
               ),
             ),
 
-            // Bottom Section - White Surface Sheet Container (Top Rounded Radius 36)
             Positioned.fill(
               top: screenHeight * 0.32,
               child: Container(
@@ -212,7 +208,6 @@ class _LoginScreenState extends State<LoginScreen> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
-                            // Login Title & Subtitle
                             const Text(
                               'Login',
                               style: TextStyle(
@@ -265,7 +260,6 @@ class _LoginScreenState extends State<LoginScreen> {
                             ),
                             const SizedBox(height: 30),
 
-                            // Email Address Field (Pill Shape)
                             TextFormField(
                               controller: _emailController,
                               keyboardType: TextInputType.emailAddress,
@@ -313,7 +307,6 @@ class _LoginScreenState extends State<LoginScreen> {
                             ),
                             const SizedBox(height: 18),
 
-                            // Password Field (Pill Shape)
                             TextFormField(
                               controller: _passwordController,
                               obscureText: _obscurePassword,
@@ -380,7 +373,6 @@ class _LoginScreenState extends State<LoginScreen> {
 
                             const SizedBox(height: 8),
 
-                            // Forgot Password Link
                             Align(
                               alignment: Alignment.centerRight,
                               child: TextButton(
@@ -430,7 +422,6 @@ class _LoginScreenState extends State<LoginScreen> {
                             ),
                             const SizedBox(height: 28),
 
-                            // Main Action Button (Pill Shape)
                             BlocBuilder<AuthBloc, AuthState>(
                               builder: (context, state) {
                                 return SizedBox(
