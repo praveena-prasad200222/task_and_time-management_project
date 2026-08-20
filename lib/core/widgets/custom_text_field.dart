@@ -10,6 +10,7 @@ class CustomTextField extends StatelessWidget {
   final Widget? suffixIcon;
   final Widget? prefixIcon;
   final int maxLines;
+  final int? maxLength;
   final TextInputType? keyboardType;
   final VoidCallback? onTap;
   final bool readOnly;
@@ -24,6 +25,7 @@ class CustomTextField extends StatelessWidget {
     this.suffixIcon,
     this.prefixIcon,
     this.maxLines = 1,
+    this.maxLength,
     this.keyboardType,
     this.onTap,
     this.readOnly = false,
@@ -48,6 +50,7 @@ class CustomTextField extends StatelessWidget {
           validator: validator,
           obscureText: obscureText,
           maxLines: maxLines,
+          maxLength: maxLength,
           keyboardType: keyboardType,
           onTap: onTap,
           readOnly: readOnly,
@@ -56,6 +59,7 @@ class CustomTextField extends StatelessWidget {
             hintText: hint,
             prefixIcon: prefixIcon,
             suffixIcon: suffixIcon,
+            counterStyle: const TextStyle(fontSize: 11, color: AppColors.textSecondary),
           ),
         ),
       ],
