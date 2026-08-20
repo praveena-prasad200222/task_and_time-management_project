@@ -72,13 +72,13 @@ class TaskCard extends StatelessWidget {
                   children: [
                     Row(
                       children: [
-                        const Icon(Icons.person_outline, size: 16, color: AppColors.primary),
+                        const Icon(Icons.person_outline, size: 15, color: AppColors.primary),
                         const SizedBox(width: 4),
                         Text(
                           task.assignedUser,
                           style: const TextStyle(
                             fontSize: 12,
-                            fontWeight: FontWeight.w500,
+                            fontWeight: FontWeight.w600,
                             color: AppColors.textSecondary,
                           ),
                         ),
@@ -86,15 +86,34 @@ class TaskCard extends StatelessWidget {
                     ),
                     Row(
                       children: [
-                        const Icon(Icons.calendar_today_outlined, size: 14, color: AppColors.primary),
-                        const SizedBox(width: 4),
-                        Text(
-                          'Due: ${DateFormatter.formatDate(task.dueDate)}',
-                          style: const TextStyle(
-                            fontSize: 12,
-                            fontWeight: FontWeight.w600,
-                            color: AppColors.textSecondary,
-                          ),
+                        Row(
+                          children: [
+                            const Icon(Icons.access_time, size: 13, color: AppColors.textSecondary),
+                            const SizedBox(width: 3),
+                            Text(
+                              'Created: ${DateFormatter.formatDate(task.createdAt)}',
+                              style: const TextStyle(
+                                fontSize: 11,
+                                fontWeight: FontWeight.w500,
+                                color: AppColors.textSecondary,
+                              ),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(width: 10),
+                        Row(
+                          children: [
+                            const Icon(Icons.calendar_today_outlined, size: 13, color: AppColors.primary),
+                            const SizedBox(width: 3),
+                            Text(
+                              'Due: ${DateFormatter.formatDate(task.dueDate)}',
+                              style: const TextStyle(
+                                fontSize: 12,
+                                fontWeight: FontWeight.w700,
+                                color: AppColors.primary,
+                              ),
+                            ),
+                          ],
                         ),
                       ],
                     ),

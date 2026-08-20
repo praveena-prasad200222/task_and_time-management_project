@@ -26,6 +26,39 @@ class _DashboardScreenState extends State<DashboardScreen> {
     context.read<TaskBloc>().add(const LoadTasksEvent());
   }
 
+  Future<void> _handleRefresh() async {
+    context.read<TaskBloc>().add(const LoadTasksEvent());
+    await Future.delayed(const Duration(milliseconds: 600));
+    if (mounted) {
+      ScaffoldMessenger.of(context).hideCurrentSnackBar();
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          behavior: SnackBarBehavior.floating,
+          margin: const EdgeInsets.all(16),
+          duration: const Duration(seconds: 2),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(14),
+          ),
+          backgroundColor: AppColors.primaryDark,
+          content: Row(
+            children: const [
+              Icon(Icons.check_circle_outline, color: Color(0xFF10B981), size: 20),
+              SizedBox(width: 10),
+              Text(
+                'Dashboard statistics refreshed',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontWeight: FontWeight.w600,
+                  fontSize: 13,
+                ),
+              ),
+            ],
+          ),
+        ),
+      );
+    }
+  }
+
   void _confirmLogout() {
     showDialog(
       context: context,
@@ -72,18 +105,33 @@ class _DashboardScreenState extends State<DashboardScreen> {
             return const LoadingWidget(isDashboard: true);
           }
           if (state is TaskErrorState) {
-            return CustomErrorWidget(
-              message: state.message,
-              onRetry: () => context.read<TaskBloc>().add(const LoadTasksEvent()),
+            return RefreshIndicator(
+              color: AppColors.primary,
+              backgroundColor: AppColors.surface,
+              displacement: 32,
+              strokeWidth: 2.8,
+              onRefresh: _handleRefresh,
+              child: SingleChildScrollView(
+                physics: const AlwaysScrollableScrollPhysics(),
+                child: SizedBox(
+                  height: MediaQuery.of(context).size.height * 0.7,
+                  child: CustomErrorWidget(
+                    message: state.message,
+                    onRetry: () => context.read<TaskBloc>().add(const LoadTasksEvent()),
+                  ),
+                ),
+              ),
             );
           }
           if (state is TaskLoadedState) {
             final recentTasks = state.tasks.take(4).toList();
 
             return RefreshIndicator(
-              onRefresh: () async {
-                context.read<TaskBloc>().add(const LoadTasksEvent());
-              },
+              color: AppColors.primary,
+              backgroundColor: AppColors.surface,
+              displacement: 32,
+              strokeWidth: 2.8,
+              onRefresh: _handleRefresh,
               child: SingleChildScrollView(
                 physics: const AlwaysScrollableScrollPhysics(),
                 padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 20.0),
