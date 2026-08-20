@@ -138,114 +138,168 @@ class _AddEditTaskScreenState extends State<AddEditTaskScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.background,
-      appBar: AppBar(
-        title: Text(isEditing ? 'Edit Task' : 'Create Task'),
-      ),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(20.0),
-        child: Form(
-          key: _formKey,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+      body: Stack(
+        children: [
+          // Top Gradient Background
+          Container(
+            width: double.infinity,
+            height: 250,
+            decoration: const BoxDecoration(
+              gradient: LinearGradient(
+                colors: [Color(0xFF0F172A), Color(0xFF1D4ED8), Color(0xFF2563EB)],
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+              ),
+            ),
+          ),
+          Column(
             children: [
-              CustomTextField(
-                label: 'Task Title',
-                hint: 'Enter task title (3-60 chars)',
-                controller: _titleController,
-                maxLength: 60,
-                validator: Validators.validateTitle,
-              ),
-              const SizedBox(height: 16),
-              CustomTextField(
-                label: 'Description',
-                hint: 'Enter detailed task description (5-300 chars)',
-                controller: _descriptionController,
-                maxLines: 3,
-                maxLength: 300,
-                validator: Validators.validateDescription,
-              ),
-              const SizedBox(height: 16),
-              CustomTextField(
-                label: 'Assigned User',
-                hint: 'e.g. John Doe (2-40 chars)',
-                controller: _assignedUserController,
-                prefixIcon: const Icon(Icons.person_outline),
-                maxLength: 40,
-                validator: Validators.validateAssignedUser,
-              ),
-              const SizedBox(height: 16),
-              Row(
-                children: [
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const Text(
-                          'Priority',
-                          style: TextStyle(fontWeight: FontWeight.w600, fontSize: 14),
+              // Top Custom Header Row
+              SafeArea(
+                bottom: false,
+                child: Padding(
+                  padding: const EdgeInsets.fromLTRB(12, 16, 20, 32),
+                  child: Row(
+                    children: [
+                      IconButton(
+                        icon: const Icon(Icons.arrow_back, color: Colors.white),
+                        onPressed: () => Navigator.pop(context),
+                      ),
+                      const SizedBox(width: 4),
+                      Text(
+                        isEditing ? 'Edit Task' : 'Create Task',
+                        style: const TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.w800,
+                          color: Colors.white,
                         ),
-                        const SizedBox(height: 6),
-                        DropdownButtonFormField<TaskPriority>(
-                          value: _selectedPriority,
-                          decoration: const InputDecoration(contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 14)),
-                          items: TaskPriority.values.map((priority) {
-                            return DropdownMenuItem(
-                              value: priority,
-                              child: Text(priority.displayName),
-                            );
-                          }).toList(),
-                          onChanged: (val) {
-                            if (val != null) setState(() => _selectedPriority = val);
-                          },
-                        ),
-                      ],
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+
+              // Bottom Curved Content Container Sheet
+              Expanded(
+                child: Container(
+                  width: double.infinity,
+                  decoration: const BoxDecoration(
+                    color: AppColors.background,
+                    borderRadius: BorderRadius.vertical(
+                      top: Radius.circular(32),
                     ),
                   ),
-                  const SizedBox(width: 12),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const Text(
-                          'Status',
-                          style: TextStyle(fontWeight: FontWeight.w600, fontSize: 14),
-                        ),
-                        const SizedBox(height: 6),
-                        DropdownButtonFormField<TaskStatus>(
-                          value: _selectedStatus,
-                          decoration: const InputDecoration(contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 14)),
-                          items: TaskStatus.values.map((status) {
-                            return DropdownMenuItem(
-                              value: status,
-                              child: Text(status.displayName),
-                            );
-                          }).toList(),
-                          onChanged: (val) {
-                            if (val != null) setState(() => _selectedStatus = val);
-                          },
-                        ),
-                      ],
+                  child: SingleChildScrollView(
+                    padding: const EdgeInsets.fromLTRB(20, 24, 20, 24),
+                    child: Form(
+                      key: _formKey,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          CustomTextField(
+                            label: 'Task Title',
+                            hint: 'Enter task title (3-60 chars)',
+                            controller: _titleController,
+                            maxLength: 60,
+                            validator: Validators.validateTitle,
+                          ),
+                          const SizedBox(height: 16),
+                          CustomTextField(
+                            label: 'Description',
+                            hint: 'Enter detailed task description (5-300 chars)',
+                            controller: _descriptionController,
+                            maxLines: 3,
+                            maxLength: 300,
+                            validator: Validators.validateDescription,
+                          ),
+                          const SizedBox(height: 16),
+                          CustomTextField(
+                            label: 'Assigned User',
+                            hint: 'e.g. John Doe (2-40 chars)',
+                            controller: _assignedUserController,
+                            prefixIcon: const Icon(Icons.person_outline),
+                            maxLength: 40,
+                            validator: Validators.validateAssignedUser,
+                          ),
+                          const SizedBox(height: 16),
+                          Row(
+                            children: [
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    const Text(
+                                      'Priority',
+                                      style: TextStyle(fontWeight: FontWeight.w600, fontSize: 14),
+                                    ),
+                                    const SizedBox(height: 6),
+                                    DropdownButtonFormField<TaskPriority>(
+                                      value: _selectedPriority,
+                                      decoration: const InputDecoration(contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 14)),
+                                      items: TaskPriority.values.map((priority) {
+                                        return DropdownMenuItem(
+                                          value: priority,
+                                          child: Text(priority.displayName),
+                                        );
+                                      }).toList(),
+                                      onChanged: (val) {
+                                        if (val != null) setState(() => _selectedPriority = val);
+                                      },
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              const SizedBox(width: 12),
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    const Text(
+                                      'Status',
+                                      style: TextStyle(fontWeight: FontWeight.w600, fontSize: 14),
+                                    ),
+                                    const SizedBox(height: 6),
+                                    DropdownButtonFormField<TaskStatus>(
+                                      value: _selectedStatus,
+                                      decoration: const InputDecoration(contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 14)),
+                                      items: TaskStatus.values.map((status) {
+                                        return DropdownMenuItem(
+                                          value: status,
+                                          child: Text(status.displayName),
+                                        );
+                                      }).toList(),
+                                      onChanged: (val) {
+                                        if (val != null) setState(() => _selectedStatus = val);
+                                      },
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+                          const SizedBox(height: 16),
+                          CustomTextField(
+                            label: 'Due Date',
+                            controller: TextEditingController(text: DateFormatter.formatDate(_selectedDueDate)),
+                            readOnly: true,
+                            onTap: _pickDueDate,
+                            prefixIcon: const Icon(Icons.calendar_today_outlined),
+                            suffixIcon: const Icon(Icons.arrow_drop_down),
+                          ),
+                          const SizedBox(height: 32),
+                          CustomButton(
+                            text: isEditing ? 'Update Task' : 'Create Task',
+                            onPressed: _onSavePressed,
+                          ),
+                        ],
+                      ),
                     ),
                   ),
-                ],
-              ),
-              const SizedBox(height: 16),
-              CustomTextField(
-                label: 'Due Date',
-                controller: TextEditingController(text: DateFormatter.formatDate(_selectedDueDate)),
-                readOnly: true,
-                onTap: _pickDueDate,
-                prefixIcon: const Icon(Icons.calendar_today_outlined),
-                suffixIcon: const Icon(Icons.arrow_drop_down),
-              ),
-              const SizedBox(height: 32),
-              CustomButton(
-                text: isEditing ? 'Update Task' : 'Create Task',
-                onPressed: _onSavePressed,
+                ),
               ),
             ],
           ),
-        ),
+        ],
       ),
     );
   }

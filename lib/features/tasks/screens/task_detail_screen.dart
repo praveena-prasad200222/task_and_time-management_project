@@ -79,123 +79,186 @@ class TaskDetailScreen extends StatelessWidget {
 
         return Scaffold(
           backgroundColor: AppColors.background,
-          appBar: AppBar(
-            title: const Text('Task Details'),
-            actions: [
-              IconButton(
-                icon: const Icon(Icons.edit_outlined, color: Colors.white),
-                onPressed: () {
-                  Navigator.pushNamed(
-                    context,
-                    '/edit-task',
-                    arguments: currentTask,
-                  );
-                },
-              ),
-              IconButton(
-                icon: const Icon(Icons.delete_outline, color: Color(0xFFFCA5A5)),
-                onPressed: () => _confirmDelete(context, currentTask),
-              ),
-            ],
-          ),
-          body: SingleChildScrollView(
-            padding: const EdgeInsets.all(16.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Container(
-                  decoration: BoxDecoration(
-                    color: AppColors.surface,
-                    borderRadius: BorderRadius.circular(20),
-                    border: Border.all(color: AppColors.border.withValues(alpha: 0.7), width: 1),
-                    boxShadow: AppColors.cardShadow,
+          body: Stack(
+            children: [
+              // Top Gradient Background
+              Container(
+                width: double.infinity,
+                height: 250,
+                decoration: const BoxDecoration(
+                  gradient: LinearGradient(
+                    colors: [Color(0xFF0F172A), Color(0xFF1D4ED8), Color(0xFF2563EB)],
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
                   ),
-                  child: Padding(
-                    padding: const EdgeInsets.all(20.0),
+                ),
+              ),
+              Column(
+                children: [
+                  // Top Custom Header Row
+                  SafeArea(
+                    bottom: false,
+                    child: Padding(
+                      padding: const EdgeInsets.fromLTRB(12, 16, 20, 32),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Row(
+                            children: [
+                              IconButton(
+                                icon: const Icon(Icons.arrow_back, color: Colors.white),
+                                onPressed: () => Navigator.pop(context),
+                              ),
+                              const SizedBox(width: 4),
+                              const Text(
+                                'Task Details',
+                                style: TextStyle(
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.w800,
+                                  color: Colors.white,
+                                ),
+                              ),
+                            ],
+                          ),
+                          Row(
+                            children: [
+                              IconButton(
+                                icon: const Icon(Icons.edit_outlined, color: Colors.white),
+                                tooltip: 'Edit Task',
+                                onPressed: () {
+                                  Navigator.pushNamed(
+                                    context,
+                                    '/edit-task',
+                                    arguments: currentTask,
+                                  );
+                                },
+                              ),
+                              IconButton(
+                                icon: const Icon(Icons.delete_outline, color: Color(0xFFFCA5A5)),
+                                tooltip: 'Delete Task',
+                                onPressed: () => _confirmDelete(context, currentTask),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+
+                  // Bottom Curved Content Container Sheet
+                  Expanded(
+                    child: Container(
+                      width: double.infinity,
+                      decoration: const BoxDecoration(
+                        color: AppColors.background,
+                        borderRadius: BorderRadius.vertical(
+                          top: Radius.circular(32),
+                        ),
+                      ),
+                  child: SingleChildScrollView(
+                    padding: const EdgeInsets.fromLTRB(20, 24, 20, 24),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            StatusBadge(status: currentTask.status),
-                            PriorityBadge(priority: currentTask.priority),
-                          ],
-                        ),
-                        const SizedBox(height: 16),
-                        Text(
-                          currentTask.title,
-                          style: const TextStyle(
-                            fontSize: 22,
-                            fontWeight: FontWeight.w800,
-                            color: AppColors.textPrimary,
+                        Container(
+                          decoration: BoxDecoration(
+                            color: AppColors.surface,
+                            borderRadius: BorderRadius.circular(20),
+                            border: Border.all(color: AppColors.border.withValues(alpha: 0.7), width: 1),
+                            boxShadow: AppColors.cardShadow,
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.all(20.0),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    StatusBadge(status: currentTask.status),
+                                    PriorityBadge(priority: currentTask.priority),
+                                  ],
+                                ),
+                                const SizedBox(height: 16),
+                                Text(
+                                  currentTask.title,
+                                  style: const TextStyle(
+                                    fontSize: 22,
+                                    fontWeight: FontWeight.w800,
+                                    color: AppColors.textPrimary,
+                                  ),
+                                ),
+                                const SizedBox(height: 12),
+                                const Text(
+                                  'Description',
+                                  style: TextStyle(
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w600,
+                                    color: AppColors.textSecondary,
+                                  ),
+                                ),
+                                const SizedBox(height: 6),
+                                Text(
+                                  currentTask.description,
+                                  style: const TextStyle(
+                                    fontSize: 15,
+                                    color: AppColors.textPrimary,
+                                    height: 1.4,
+                                  ),
+                                ),
+                                const SizedBox(height: 20),
+                                const Divider(color: AppColors.border),
+                                const SizedBox(height: 12),
+                                _buildDetailRow(
+                                  icon: Icons.person_outline,
+                                  label: 'Assigned User',
+                                  value: currentTask.assignedUser,
+                                ),
+                                const SizedBox(height: 12),
+                                _buildDetailRow(
+                                  icon: Icons.event,
+                                  label: 'Due Date',
+                                  value: DateFormatter.formatDate(currentTask.dueDate),
+                                ),
+                                const SizedBox(height: 12),
+                                _buildDetailRow(
+                                  icon: Icons.access_time,
+                                  label: 'Created Date',
+                                  value: DateFormatter.formatDateTime(currentTask.createdAt),
+                                ),
+                                const SizedBox(height: 12),
+                                _buildDetailRow(
+                                  icon: Icons.update,
+                                  label: 'Last Updated',
+                                  value: DateFormatter.formatDateTime(currentTask.updatedAt),
+                                ),
+                              ],
+                            ),
                           ),
                         ),
-                        const SizedBox(height: 12),
-                        const Text(
-                          'Description',
-                          style: TextStyle(
-                            fontSize: 14,
-                            fontWeight: FontWeight.w600,
-                            color: AppColors.textSecondary,
+                        const SizedBox(height: 24),
+                        SizedBox(
+                          width: double.infinity,
+                          height: 50,
+                          child: ElevatedButton.icon(
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: AppColors.primary,
+                            ),
+                            onPressed: () => _showStatusChangeDialog(context, currentTask),
+                            icon: const Icon(Icons.swap_horiz),
+                            label: const Text('Change Task Status'),
                           ),
-                        ),
-                        const SizedBox(height: 6),
-                        Text(
-                          currentTask.description,
-                          style: const TextStyle(
-                            fontSize: 15,
-                            color: AppColors.textPrimary,
-                            height: 1.4,
-                          ),
-                        ),
-                        const SizedBox(height: 20),
-                        const Divider(color: AppColors.border),
-                        const SizedBox(height: 12),
-                        _buildDetailRow(
-                          icon: Icons.person_outline,
-                          label: 'Assigned User',
-                          value: currentTask.assignedUser,
-                        ),
-                        const SizedBox(height: 12),
-                        _buildDetailRow(
-                          icon: Icons.event,
-                          label: 'Due Date',
-                          value: DateFormatter.formatDate(currentTask.dueDate),
-                        ),
-                        const SizedBox(height: 12),
-                        _buildDetailRow(
-                          icon: Icons.access_time,
-                          label: 'Created Date',
-                          value: DateFormatter.formatDateTime(currentTask.createdAt),
-                        ),
-                        const SizedBox(height: 12),
-                        _buildDetailRow(
-                          icon: Icons.update,
-                          label: 'Last Updated',
-                          value: DateFormatter.formatDateTime(currentTask.updatedAt),
                         ),
                       ],
                     ),
                   ),
                 ),
-                const SizedBox(height: 24),
-                SizedBox(
-                  width: double.infinity,
-                  height: 50,
-                  child: ElevatedButton.icon(
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: AppColors.primary,
-                    ),
-                    onPressed: () => _showStatusChangeDialog(context, currentTask),
-                    icon: const Icon(Icons.swap_horiz),
-                    label: const Text('Change Task Status'),
-                  ),
-                ),
-              ],
-            ),
+              ),
+            ],
           ),
-        );
+        ],
+      ),
+    );
       },
     );
   }
