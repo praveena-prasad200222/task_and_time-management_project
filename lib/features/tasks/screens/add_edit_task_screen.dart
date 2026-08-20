@@ -55,10 +55,14 @@ class _AddEditTaskScreenState extends State<AddEditTaskScreen> {
   }
 
   Future<void> _pickDueDate() async {
+    final now = DateTime.now();
+    final today = DateTime(now.year, now.month, now.day);
+    final initial = _selectedDueDate.isBefore(today) ? today : _selectedDueDate;
+
     final picked = await showDatePicker(
       context: context,
-      initialDate: _selectedDueDate,
-      firstDate: DateTime.now().subtract(const Duration(days: 365)),
+      initialDate: initial,
+      firstDate: today,
       lastDate: DateTime.now().add(const Duration(days: 365 * 5)),
     );
     if (picked != null) {
@@ -71,6 +75,35 @@ class _AddEditTaskScreenState extends State<AddEditTaskScreen> {
   void _onSavePressed() {
     if (_formKey.currentState!.validate()) {
       final now = DateTime.now();
+      final today = DateTime(now.year, now.month, now.day);
+      final selectedDay = DateTime(_selectedDueDate.year, _selectedDueDate.month, _selectedDueDate.day);
+
+      if (selectedDay.isBefore(today)) {
+        ScaffoldMessenger.of(context).hideCurrentSnackBar();
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            behavior: SnackBarBehavior.floating,
+            margin: const EdgeInsets.all(16),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(14),
+            ),
+            backgroundColor: AppColors.error,
+            content: Row(
+              children: const [
+                Icon(Icons.error_outline, color: Colors.white, size: 20),
+                SizedBox(width: 10),
+                Expanded(
+                  child: Text(
+                    'Due date cannot be set to a past date',
+                    style: TextStyle(color: Colors.white, fontWeight: FontWeight.w600),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        );
+        return;
+      }
 
       if (isEditing) {
         final updatedTask = widget.taskToEdit!.copyWith(

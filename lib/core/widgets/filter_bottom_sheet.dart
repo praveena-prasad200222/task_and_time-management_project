@@ -2,16 +2,19 @@ import 'package:flutter/material.dart';
 import '../../models/task_status.dart';
 import '../../models/task_priority.dart';
 import '../constants/app_colors.dart';
+import '../utils/date_formatter.dart';
 
 class FilterBottomSheet extends StatefulWidget {
   final TaskStatus? initialStatus;
   final TaskPriority? initialPriority;
-  final Function(TaskStatus? status, TaskPriority? priority) onApply;
+  final DateTime? initialDueDate;
+  final Function(TaskStatus? status, TaskPriority? priority, DateTime? dueDate) onApply;
 
   const FilterBottomSheet({
     super.key,
     this.initialStatus,
     this.initialPriority,
+    this.initialDueDate,
     required this.onApply,
   });
 
@@ -22,12 +25,14 @@ class FilterBottomSheet extends StatefulWidget {
 class _FilterBottomSheetState extends State<FilterBottomSheet> {
   TaskStatus? selectedStatus;
   TaskPriority? selectedPriority;
+  DateTime? selectedDueDate;
 
   @override
   void initState() {
     super.initState();
     selectedStatus = widget.initialStatus;
     selectedPriority = widget.initialPriority;
+    selectedDueDate = widget.initialDueDate;
   }
 
   @override
@@ -54,6 +59,7 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
                   setState(() {
                     selectedStatus = null;
                     selectedPriority = null;
+                    selectedDueDate = null;
                   });
                 },
                 child: const Text('Reset All', style: TextStyle(color: AppColors.error)),
@@ -108,13 +114,62 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
               }),
             ],
           ),
+          const SizedBox(height: 20),
+          const Text('Due Date', style: TextStyle(fontWeight: FontWeight.w600, fontSize: 14)),
+          const SizedBox(height: 8),
+          Row(
+            children: [
+              OutlinedButton.icon(
+                style: OutlinedButton.styleFrom(
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                  side: BorderSide(
+                    color: selectedDueDate != null ? AppColors.primary : AppColors.border,
+                    width: selectedDueDate != null ? 1.5 : 1.0,
+                  ),
+                ),
+                onPressed: () async {
+                  final picked = await showDatePicker(
+                    context: context,
+                    initialDate: selectedDueDate ?? DateTime.now(),
+                    firstDate: DateTime.now().subtract(const Duration(days: 365)),
+                    lastDate: DateTime.now().add(const Duration(days: 365 * 5)),
+                  );
+                  if (picked != null) {
+                    setState(() => selectedDueDate = picked);
+                  }
+                },
+                icon: Icon(
+                  Icons.calendar_today_outlined,
+                  size: 16,
+                  color: selectedDueDate != null ? AppColors.primary : AppColors.textSecondary,
+                ),
+                label: Text(
+                  selectedDueDate != null
+                      ? DateFormatter.formatDate(selectedDueDate!)
+                      : 'Select Due Date',
+                  style: TextStyle(
+                    color: selectedDueDate != null ? AppColors.primary : AppColors.textSecondary,
+                    fontWeight: selectedDueDate != null ? FontWeight.w600 : FontWeight.w400,
+                  ),
+                ),
+              ),
+              if (selectedDueDate != null) ...[
+                const SizedBox(width: 8),
+                IconButton(
+                  icon: const Icon(Icons.clear, size: 20, color: AppColors.error),
+                  tooltip: 'Clear Date',
+                  onPressed: () => setState(() => selectedDueDate = null),
+                ),
+              ],
+            ],
+          ),
           const SizedBox(height: 28),
           SizedBox(
             width: double.infinity,
             height: 48,
             child: ElevatedButton(
               onPressed: () {
-                widget.onApply(selectedStatus, selectedPriority);
+                widget.onApply(selectedStatus, selectedPriority, selectedDueDate);
                 Navigator.pop(context);
               },
               child: const Text('Apply Filters'),

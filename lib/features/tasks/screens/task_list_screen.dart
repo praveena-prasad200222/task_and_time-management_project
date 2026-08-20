@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../core/constants/app_colors.dart';
+import '../../../core/utils/date_formatter.dart';
 import '../../../core/widgets/task_card.dart';
 import '../../../core/widgets/loading_widget.dart';
 import '../../../core/widgets/empty_state_widget.dart';
@@ -23,6 +24,7 @@ class _TaskListScreenState extends State<TaskListScreen> {
   final TextEditingController _searchController = TextEditingController();
   TaskStatus? _selectedStatus;
   TaskPriority? _selectedPriority;
+  DateTime? _selectedDueDate;
 
   @override
   void initState() {
@@ -36,6 +38,7 @@ class _TaskListScreenState extends State<TaskListScreen> {
             searchQuery: _searchController.text,
             statusFilter: _selectedStatus,
             priorityFilter: _selectedPriority,
+            dueDateFilter: _selectedDueDate,
           ),
         );
   }
@@ -48,10 +51,12 @@ class _TaskListScreenState extends State<TaskListScreen> {
       builder: (ctx) => FilterBottomSheet(
         initialStatus: _selectedStatus,
         initialPriority: _selectedPriority,
-        onApply: (status, priority) {
+        initialDueDate: _selectedDueDate,
+        onApply: (status, priority, dueDate) {
           setState(() {
             _selectedStatus = status;
             _selectedPriority = priority;
+            _selectedDueDate = dueDate;
           });
           _loadTasks();
         },
@@ -67,6 +72,9 @@ class _TaskListScreenState extends State<TaskListScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final bool hasActiveFilter =
+        _selectedStatus != null || _selectedPriority != null || _selectedDueDate != null;
+
     return Scaffold(
       backgroundColor: AppColors.background,
       appBar: AppBar(
@@ -75,9 +83,7 @@ class _TaskListScreenState extends State<TaskListScreen> {
           IconButton(
             icon: Icon(
               Icons.filter_list,
-              color: (_selectedStatus != null || _selectedPriority != null)
-                  ? const Color(0xFFFBBF24)
-                  : Colors.white,
+              color: hasActiveFilter ? const Color(0xFFFBBF24) : Colors.white,
             ),
             onPressed: _openFilterSheet,
           ),
@@ -105,32 +111,45 @@ class _TaskListScreenState extends State<TaskListScreen> {
               ),
             ),
           ),
-          if (_selectedStatus != null || _selectedPriority != null)
+          if (hasActiveFilter)
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 4.0),
-              child: Row(
-                children: [
-                  const Text('Filters: ', style: TextStyle(fontSize: 12, fontWeight: FontWeight.w600)),
-                  if (_selectedStatus != null) ...[
-                    Chip(
-                      label: Text(_selectedStatus!.displayName),
-                      onDeleted: () {
-                        setState(() => _selectedStatus = null);
-                        _loadTasks();
-                      },
-                    ),
-                    const SizedBox(width: 6),
+              child: SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: Row(
+                  children: [
+                    const Text('Filters: ', style: TextStyle(fontSize: 12, fontWeight: FontWeight.w600)),
+                    if (_selectedStatus != null) ...[
+                      Chip(
+                        label: Text(_selectedStatus!.displayName),
+                        onDeleted: () {
+                          setState(() => _selectedStatus = null);
+                          _loadTasks();
+                        },
+                      ),
+                      const SizedBox(width: 6),
+                    ],
+                    if (_selectedPriority != null) ...[
+                      Chip(
+                        label: Text(_selectedPriority!.displayName),
+                        onDeleted: () {
+                          setState(() => _selectedPriority = null);
+                          _loadTasks();
+                        },
+                      ),
+                      const SizedBox(width: 6),
+                    ],
+                    if (_selectedDueDate != null) ...[
+                      Chip(
+                        label: Text('Due: ${DateFormatter.formatDate(_selectedDueDate!)}'),
+                        onDeleted: () {
+                          setState(() => _selectedDueDate = null);
+                          _loadTasks();
+                        },
+                      ),
+                    ],
                   ],
-                  if (_selectedPriority != null) ...[
-                    Chip(
-                      label: Text(_selectedPriority!.displayName),
-                      onDeleted: () {
-                        setState(() => _selectedPriority = null);
-                        _loadTasks();
-                      },
-                    ),
-                  ],
-                ],
+                ),
               ),
             ),
           Expanded(
@@ -171,6 +190,7 @@ class _TaskListScreenState extends State<TaskListScreen> {
                                 setState(() {
                                   _selectedStatus = null;
                                   _selectedPriority = null;
+                                  _selectedDueDate = null;
                                 });
                                 _loadTasks();
                               },
